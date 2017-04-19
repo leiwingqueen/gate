@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>表单提交</title>
+<script language="javascript" src="/assets/plugins/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" >
+//$(document).ready(function(){
+	
+	function submit() {
+		var formStr = $('#formStr').val();
+		$('#form').html(formStr);
+		$("#form1").submit();
+	}
+	
+//});
+
+
+</script>
+
+</head>
+<body>
+	<textarea id="formStr" rows="20" cols="200">
+	
+	</textarea>
+	<br/>
+	<br/>
+	<br/>
+	<input type="button" value="提交" onclick="submit()" />
+</body>
+
+<div style="display: none;" id="form">
+	
+</div>
+
+
+	
+
+
+</html>

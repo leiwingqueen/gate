@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.order.mapper.POrderStatusRecrodMapper">
+	<insert id="insert" parameterType="pOrderStatusRecrodPO">
+		<![CDATA[
+			insert into p_order_status_record set
+							order_id=#{orderId},
+							order_type=#{orderType},
+							create_time=#{createTime},
+							last_modify=#{lastModify},
+							channel=#{channel},
+							partner_id=#{partnerId},
+							partner_order_id=#{partnerOrderId},
+							status=#{status}
+					]]>
+	</insert>
+	<select id="getByPartnerOrderId" resultType="pOrderStatusRecrodPO" parameterType="java.lang.String">
+		<![CDATA[
+			select * from p_order_status_record where partner_id = #{partnerId} and partner_order_id=#{partnerOrderId}
+		]]>
+	</select>
+	
+	<update id="updateStatus" >
+		<![CDATA[
+			update 
+				p_order_status_record 
+			set 
+				status=#{newStatus}, 
+				last_modify=#{modifyTime}
+			where 
+				order_id= #{orderId}
+		]]>
+	</update>
+</mapper>

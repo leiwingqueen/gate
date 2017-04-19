@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.balance.mapper.PBalanceMapper">
+	
+	<!-- "id" must be as same as method name of the interface -->
+	<select id="list" resultType="pBalancePO" parameterType="pBalanceSearchVO">
+		<![CDATA[select * from p_balance ]]>
+		<where>
+			<if test="userId != null and userId != ''" >
+				<![CDATA[ user_id = #{userId}]]>
+			</if>
+			<if test="balanceType != null and balanceType != ''" >
+				<![CDATA[ AND balance_type = #{balanceType} ]]>
+			</if>
+			<if test="status != null and status != ''" >
+				<![CDATA[ AND status = #{status} ]]>
+			</if>
+		</where>
+		ORDER BY balance_type DESC 
+		<![CDATA[ LIMIT #{start} , #{size}  ]]>
+	</select>
+	
+	<select id="count" resultType="int" parameterType="pBalanceSearchVO">
+		<![CDATA[select count(*) as num from p_balance ]]>
+		<where>
+			<if test="userId != null and userId != ''" >
+				<![CDATA[ user_id = #{userId}  ]]>
+			</if>
+			<if test="balanceType != null and balanceType != ''" >
+				<![CDATA[ AND balance_type = #{balanceType} ]]>
+			</if>
+			<if test="status != null and status != ''" >
+				<![CDATA[ AND status = #{status} ]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="get" resultType="pBalancePO" parameterType="int">
+		<![CDATA[
+			select * from p_balance where id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="pBalancePO">
+		<![CDATA[
+			insert into p_balance set
+						user_id=#{userId},
+										usable_balance=#{usableBalance},
+									create_time=#{createTime},
+									deposit_time=#{depositTime},
+									status=#{status},
+									remark=#{remark},
+									acount_type=#{acountType}
+					]]>
+	</insert>
+    
+	<update id="update" parameterType="pBalancePO">
+		<![CDATA[
+			update p_balance set
+						user_id=#{userId},
+										usable_balance=#{usableBalance},
+									create_time=#{createTime},
+									deposit_time=#{depositTime},
+									status=#{status},
+									remark=#{remark},
+									acount_type=#{acountType},
+									balance_type = #{balanceType}
+				where id = #{id}
+		]]>
+	</update>
+    
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			DELETE FROM p_balance WHERE id = #{id}
+		]]>
+	</delete>
+	
+	<update id="balanceIncrease">
+		<![CDATA[
+			update p_balance set
+				usable_balance = usable_balance + #{amount}
+				where 
+					user_id = #{userId}
+					and balance_type = #{balanceType}
+					and status = 1
+		]]>
+	</update>
+	
+	<update id="charge">
+		<![CDATA[
+			update p_balance set
+				usable_balance = usable_balance + #{amount},
+				deposit_time = #{depositTime}
+				where 
+					user_id = #{userId}
+					and balance_type = #{balanceType}
+					and status = 1
+		]]>
+	</update>
+	
+	<update id="balanceDecrease">
+		<![CDATA[
+			update p_balance set
+				usable_balance = usable_balance - #{amount}
+				where 
+					user_id = #{userId}
+					and balance_type = #{balanceType} 
+					and usable_balance >= #{amount}
+					and status = 1
+		]]>
+	</update>
+	
+	<select id="getByUserId" resultType="pBalancePO">
+		<![CDATA[
+			select * from p_balance where user_id = #{userId} and balance_type = #{balanceType}
+		]]>
+	</select>
+	
+	<select id="queryStatByType" resultType="pBalanceStatVO">
+		<![CDATA[
+			SELECT 
+                b.*,
+                (select ifnull(sum(amount), 0.00) from p_user_balance_log log where log.user_id = b.user_id and trade_type = 1) as income,
+                (select ifnull(sum(amount), 0.00) from p_user_balance_log log where log.user_id = b.user_id and trade_type = 2) as outlay
+           	FROM 
+           		p_balance b 
+           	where 
+           		acount_type = #{type}
+		]]>
+	</select>
+	
+	<select id="listByType" resultType="pBalancePO">
+		<![CDATA[
+			SELECT 
+                b.*
+           	FROM 
+           		p_balance b 
+           	where 
+           		acount_type = #{type}
+		]]>
+	</select>
+	
+	<select id="listAll" resultType="pBalancePO">
+		<![CDATA[
+			SELECT 
+                b.*
+           	FROM 
+           		p_balance b
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.conf.mapper.SBankPayLimitMapper">
+	
+	<!-- "id" must be as same as method name of the interface -->
+	<select id="list" resultType="sBankPayLimitPO" parameterType="sBankPayLimitSearchVO">
+		<![CDATA[select * from s_bank_pay_limit ]]>
+		<where>
+			<if test="bankId != null and bankId != ''" >
+				<![CDATA[ bank_id = #{bankId}]]>
+			</if>
+			<if test="channel != null and channel != ''" >
+				<![CDATA[ AND channel = #{channel} ]]>
+			</if>
+			<if test="userType != null and userType != ''" >
+				<![CDATA[ AND user_type = #{userType} ]]>
+			</if>
+			<if test="startTime != null and startTime != ''" >
+				<![CDATA[ AND create_time >= #{startTime} ]]>
+			</if>
+			<if test="endTime != null and endTime != ''" >
+				<![CDATA[ AND create_time <= #{endTime} ]]>
+			</if>
+		</where>
+		ORDER BY id asc 
+		<![CDATA[ LIMIT #{start} , #{size}  ]]>
+	</select>
+	
+	<select id="count" resultType="int" parameterType="sBankPayLimitSearchVO">
+		<![CDATA[select count(*) as num from s_bank_pay_limit ]]>
+		<where>
+			<if test="bankId != null and bankId != ''" >
+				<![CDATA[ bank_id = #{bankId}  ]]>
+			</if>
+			<if test="channel != null and channel != ''" >
+				<![CDATA[ AND channel = #{channel} ]]>
+			</if>
+			<if test="userType != null and userType != ''" >
+				<![CDATA[ AND user_type = #{userType} ]]>
+			</if>
+			<if test="startTime != null and startTime != ''" >
+				<![CDATA[ AND create_time >= #{startTime} ]]>
+			</if>
+			<if test="endTime != null and endTime != ''" >
+				<![CDATA[ AND create_time <= #{endTime} ]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="get" resultType="sBankPayLimitPO" parameterType="int">
+		<![CDATA[
+			select * from s_bank_pay_limit where id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="sBankPayLimitPO">
+		<![CDATA[
+			insert into s_bank_pay_limit set
+							bank_id=#{bankId},
+									channel=#{channel},
+									user_type=#{userType},
+									single_limit=#{singleLimit},
+									single_limit_type=#{singleLimitType},
+									day_limit=#{dayLimit},
+									day_limit_type=#{dayLimitType},
+									month_limit=#{monthLimit},
+									month_limit_type=#{monthLimitType},
+									remark=#{remark},
+									create_time=#{createTime},
+									update_time=#{updateTime}
+					]]>
+	</insert>
+    
+	<update id="update" parameterType="sBankPayLimitPO">
+		<![CDATA[
+			update s_bank_pay_limit set
+							bank_id=#{bankId},
+									channel=#{channel},
+									user_type=#{userType},
+									single_limit=#{singleLimit},
+									single_limit_type=#{singleLimitType},
+									day_limit=#{dayLimit},
+									day_limit_type=#{dayLimitType},
+									month_limit=#{monthLimit},
+									month_limit_type=#{monthLimitType},
+									remark=#{remark},
+									update_time=#{updateTime}
+				where id = #{id}
+		]]>
+	</update>
+    
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			DELETE FROM s_bank_pay_limit WHERE id = #{id}
+		]]>
+	</delete>
+	
+	<select id="getByBankId" resultType="sBankPayLimitPO" >
+		<![CDATA[
+			select * from s_bank_pay_limit  where bank_id = #{bankId} and channel = #{channel} and user_type = #{userType}
+			]]>
+	</select>
+	
+</mapper>

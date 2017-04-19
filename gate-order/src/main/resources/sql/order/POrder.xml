@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.order.mapper.POrderMapper">
+	<select id="getByOrderId" resultType="pOrderPO" parameterType="java.lang.String">
+		<![CDATA[
+			select * from p_order where order_id = #{orderId}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="pOrderPO">
+		<![CDATA[
+			insert into p_order set
+							order_id=#{orderId},
+									order_type=#{orderType},
+									amount=#{amount},
+									pay_channel=#{payChannel},
+									channel_trade_no=#{channelTradeNo},
+									partner_id=#{partnerId},
+									partner_trade_no=#{partnerTradeNo},
+									bank_id=#{bankId},
+									create_time=#{createTime},
+									ch_refund_time=#{chRefundTime},
+									finish_time=#{finishTime},
+									refund_amount=#{refundAmount},
+									gmt_payment=#{gmtPayment},
+									update_time=#{updateTime},
+									status=#{status},
+									ip=#{ip},
+									subject=#{subject},
+									sub_subject=#{subSubject},
+									refrence_id=#{refrenceId},
+									notify_status=#{notifyStatus},
+									fee=#{fee}
+					]]>
+	</insert>
+	
+	<update id="updateNoticeStatus" >
+		<![CDATA[
+			update p_order set notify_status=#{notifyStatus},finish_time=#{finishTime} 
+			where order_id= #{orderId}
+		]]>
+	</update>
+	
+	<select id="getOrderBypartnerOrderId" resultType="pOrderPO">
+		<![CDATA[
+			select * from p_order where partner_id = #{partnerId} and partner_trade_no = #{partnerOrderId}
+		]]>
+	</select>
+	
+	<select id="listNoLog" resultType="pOrderPO">
+		<![CDATA[
+			select o.* 
+				from 
+					p_order o 
+				left join 
+					p_user_balance_log l 
+				on 
+					o.order_id = l.order_id 
+				where 
+					o.create_time > #{startTime} 
+					and o.order_type in (1, 2) 
+					and l.id is null 
+				order by 
+					o.create_time asc
+				limit #{row}
+		]]>
+	</select>
+	
+</mapper>

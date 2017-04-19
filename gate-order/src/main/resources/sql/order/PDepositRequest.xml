@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.order.mapper.PDepositRequestMapper">
+	<!-- "id" must be as same as method name of the interface -->
+	<select id="getByOrderId" resultType="pDepositRequestPO" parameterType="java.lang.String">
+		<![CDATA[
+			select * from p_deposit_request where order_id = #{orderId}
+		]]>
+	</select>
+	<select id="getByPartnerTradeNo" resultType="pDepositRequestPO" parameterType="java.lang.String">
+		<![CDATA[
+			select * from p_deposit_request where partner_id = #{partnerId} and partner_trade_no=#{partnerTradeNo}
+		]]>
+	</select>
+	<insert id="insert" parameterType="pDepositRequestPO">
+		<![CDATA[
+			insert into p_deposit_request set
+							order_id=#{orderId},
+									partner_id=#{partnerId},
+									partner_trade_no=#{partnerTradeNo},
+									pay_channel=#{payChannel},
+									channel_trade_no=#{channelTradeNo},
+									request_url=#{requestUrl},
+									param_value=#{paramValue},
+									result=#{result},
+									create_time=#{createTime},
+									call_back_time=#{callBackTime},
+									call_back_result=#{callBackResult},
+									amount=#{amount},
+									status=#{status},
+									ip=#{ip},
+									source=#{source},
+									callback_url=#{callbackUrl},
+									notify_url=#{notifyUrl},
+									pay_type=#{payType}
+					]]>
+	</insert>
+	
+	<update id="updateStatus" >
+		<![CDATA[ update p_deposit_request  ]]>
+		<set>
+			<if test="newStatus > 0 ">
+				status=#{newStatus},
+			</if>
+			<if test="callBackTime != null and callBackTime != ''">
+				call_back_time=#{callBackTime},
+			</if>
+			<if test="callbackData != null and callbackData != ''">
+				result=#{callbackData},
+			</if>
+			<if test="channelTradeNo != null and channelTradeNo != ''">
+				channel_trade_no=#{channelTradeNo},
+			</if>
+			<if test="payType > 0">
+				pay_type=#{payType},
+			</if>
+		</set>
+		<![CDATA[ where order_id= #{orderId} and status = #{oldStatus}  ]]>
+	</update>
+	
+	<select id="list" resultType="pDepositRequestPO" parameterType="pDepositRequestSearchVO">
+		<![CDATA[
+			select * from p_deposit_request 
+		]]>
+		<where>
+			<if test="startDate != null" >
+				<![CDATA[ create_time >= #{startDate}]]>
+			</if>
+			<if test="endDate != null" >
+				<![CDATA[ AND create_time <= #{endDate} ]]>
+			</if>
+			<if test="payChannel != null and payChannel != ''" >
+				<![CDATA[ AND pay_channel = #{payChannel}]]>
+			</if>
+			<if test="partnerTradeNo != null and partnerTradeNo != ''" >
+				<![CDATA[ AND partner_trade_no = #{partnerTradeNo}]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND order_id = #{orderId}]]>
+			</if>
+			<if test="status > 0" >
+				<![CDATA[ AND status = #{status}]]>
+			</if>
+		</where>
+		ORDER BY create_time ASC
+		<![CDATA[ LIMIT #{start} , #{size}  ]]>	
+	</select>
+	
+	<select id="listPage" resultType="pDepositRequestPO" parameterType="pDepositRequestSearchVO">
+		<![CDATA[
+			select * from p_deposit_request 
+		]]>
+		<where>
+			<if test="startDate != null" >
+				<![CDATA[ create_time >= #{startDate}]]>
+			</if>
+			<if test="endDate != null" >
+				<![CDATA[ AND create_time <= #{endDate} ]]>
+			</if>
+			
+			<if test="payChannel != null and payChannel != ''" >
+				<![CDATA[ AND pay_channel = #{payChannel}]]>
+			</if>
+			<if test="partnerTradeNo != null and partnerTradeNo != ''" >
+				<![CDATA[ AND partner_trade_no = #{partnerTradeNo}]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND order_id = #{orderId}]]>
+			</if>
+			<if test="status > 0" >
+				<![CDATA[ AND status = #{status}]]>
+			</if>
+		</where>
+		ORDER BY create_time desc
+		<![CDATA[ LIMIT #{start} , #{size}  ]]>	
+	</select>
+	
+	<select id="count" resultType="int" parameterType="pDepositRequestSearchVO">
+		<![CDATA[
+			select count(*) from p_deposit_request 
+		]]>
+		<where>
+			<if test="startDate != null" >
+				<![CDATA[ create_time >= #{startDate}]]>
+			</if>
+			<if test="endDate != null" >
+				<![CDATA[ AND create_time <= #{endDate} ]]>
+			</if>
+			
+			<if test="payChannel != null and payChannel != ''" >
+				<![CDATA[ AND pay_channel = #{payChannel}]]>
+			</if>
+			<if test="partnerTradeNo != null and partnerTradeNo != ''" >
+				<![CDATA[ AND partner_trade_no = #{partnerTradeNo}]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND order_id = #{orderId}]]>
+			</if>
+			<if test="status > 0" >
+				<![CDATA[ AND status = #{status}]]>
+			</if>
+		</where>
+	</select>
+</mapper>

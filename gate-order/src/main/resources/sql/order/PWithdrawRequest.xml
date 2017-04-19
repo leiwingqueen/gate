@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.order.mapper.PWithdrawRequestMapper">
+	<!-- "id" must be as same as method name of the interface -->
+	<select id="getByOrderId" resultType="pWithdrawRequestPO" parameterType="java.lang.String">
+		<![CDATA[
+			select * from p_withdraw_request where order_id = #{orderId}
+		]]>
+	</select>
+	<select id="getByPartnerOrderId" resultType="pWithdrawRequestPO">
+		<![CDATA[
+			select * from p_withdraw_request where partner_id = #{partnerId} and partner_order_id=#{partnerOrderId}
+		]]>
+	</select>
+	<insert id="insert" parameterType="pWithdrawRequestPO">
+		<![CDATA[
+			insert into p_withdraw_request set
+							order_id=#{orderId},
+							partner_id=#{partnerId},
+							partner_order_id=#{partnerOrderId},
+							channel=#{channel},
+							channel_order_id=#{channelOrderId},
+							request_url=#{requestUrl},
+							param_value=#{paramValue},
+							result =#{result},
+							create_time=#{createTime},
+							callback_time=#{callbackTime},
+							callback_result=#{callbackResult},
+							amount=#{amount},
+							status=#{status},
+							ip=#{ip},
+							source=#{source},
+							notify_url=#{notifyUrl}
+					]]>
+	</insert>
+	
+	<update id="update" >
+		<![CDATA[ update p_withdraw_request  ]]>
+		<set>
+			<if test="newStatus > 0 ">
+				status=#{newStatus},
+			</if>
+			<if test="callbackTime != null and callbackTime != ''">
+				callback_time=#{callbackTime},
+			</if>
+			<if test="result != null and result != ''">
+				result=#{result},
+			</if>
+			<if test="callbackResult != null and callbackResult != ''">
+				callback_result=#{callbackResult},
+			</if>
+			<if test="channelOrderId != null and channelOrderId != ''">
+				channel_order_id=#{channelOrderId},
+			</if>
+			<if test="requestUrl != null and requestUrl != ''">
+				request_url = #{requestUrl},
+			</if>
+		</set>
+		where 
+			order_id= #{orderId} 
+			and status = #{oldStatus}
+	</update>
+	
+	<select id="listPageByCreateTime" resultType="pWithdrawRequestPO">
+		<![CDATA[
+			select * from p_withdraw_request where create_time>=#{begin} and create_time<=#{end} ORDER BY create_time asc LIMIT #{start} , #{size}
+		]]>
+	</select>
+	
+	<select id="list" resultType="pWithdrawRequestVO" parameterType="pWithdrawRequestSearchVO">
+		<![CDATA[        
+			select * from p_withdraw_request t
+			]]>
+		<where>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ AND t.create_time >= #{startDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''" >
+				<![CDATA[ AND t.create_time <= #{endDate} ]]>
+			</if>
+			<if test="channel != null and channel != '' " >
+				<![CDATA[ AND t.channel = #{channel} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND t.partner_order_id = #{partnerOrderId} ]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND t.order_id = #{orderId} ]]>
+			</if>
+			<if test="status != null and status != ''" >
+				<![CDATA[ AND t.status = #{status} ]]>
+			</if>
+			
+		</where>
+		<![CDATA[ order by create_time desc LIMIT #{start} , #{size}  ]]>
+	</select>
+	<select id="count" resultType="int" parameterType="pWithdrawRequestSearchVO">
+		<![CDATA[
+			select count(*) from p_withdraw_request t
+			]]>
+		<where>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ AND t.create_time >= #{startDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''" >
+				<![CDATA[ AND t.create_time <= #{endDate} ]]>
+			</if>
+			<if test="channel != null and channel != '' " >
+				<![CDATA[ AND t.channel = #{channel} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND t.partner_order_id = #{partnerOrderId} ]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND t.order_id = #{orderId} ]]>
+			</if>
+			<if test="status != null and status != ''" >
+				<![CDATA[ AND t.status = #{status} ]]>
+			</if>
+			
+		</where>
+	</select>
+	
+	<update id="updateChannelOrderId" >
+		<![CDATA[ 
+			update p_withdraw_request set channel_order_id = #{channelOrderId} where order_id = #{orderId}
+			]]>
+	</update>
+</mapper>

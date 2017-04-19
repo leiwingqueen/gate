@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+		<artifactId>gate</artifactId>
+		<groupId>com.elend</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>gate-conf</artifactId>
+	<description>网关配置</description>
+	
+	<build>  
+    	<plugins>  
+      		<plugin>  
+			    <groupId>com.elend.maven</groupId>  
+			    <artifactId>maven-code-generate-plugin</artifactId>  
+			    <version>2.1</version>  
+      		</plugin>  
+    	</plugins>  
+  	</build>
+	<profiles>  
+        <profile>  
+             <id>code-generate-profile</id>  
+             <properties>  
+                  <url>jdbc:mysql://mysql.elend.gzdai.com:3306/gate_bak?useUnicode=true&amp;amp;characterEncoding=utf8&amp;amp;autoReconnect=true</url>  
+                  <username>elend</username>  
+                  <password>ZstRSCPg+</password>  
+                  <tableName>s_bank_pay_limit</tableName>
+                  <packageName>com.elend.gate.conf</packageName> 
+                  <searchParams>bank_id,channel,user_type</searchParams>
+                  <mapperFlag>false</mapperFlag> 
+                  <mybatisXmlFlag>false</mybatisXmlFlag> 
+                  <serviceFlag>true</serviceFlag> 
+                  <serviceImplFlag>true</serviceImplFlag> 
+                  <modelFlag>false</modelFlag> 
+                  <voFlag>false</voFlag> 
+                  <searchVoFlag>false</searchVoFlag> 
+                  <controllerFlag>true</controllerFlag> 
+             </properties>  
+        </profile>  
+ 	</profiles>
+ 	
+	<dependencies>
+		<dependency>
+			<groupId>com.elend</groupId>
+			<artifactId>gate-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.yeepay</groupId>
+		  <artifactId>YeePay_HTMLcommon</artifactId>
+		  <version>3.0</version>
+		</dependency>
+		<!-- 测试aop用，正式发布由外层项目制定 -->
+		<dependency>
+		    <groupId>org.aspectj</groupId>
+		    <artifactId>aspectjweaver</artifactId>
+		    <version>1.6.12</version>
+		    <scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

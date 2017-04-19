@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- 带 (*) 的表示必须配置 -->
+	
+	<!-- 服务器配置 (*), 服务器名称必须是 英文字母+数字 的形式 -->
+	<yyms_domain value=".admin.gzdai.com" />
+	
+	<!-- 每页显示记录数 -->
+	<page_size value="15" />
+	
+	<!-- 显示最大记录数 -->
+	<page_max_size value="1000" />
+	
+	<!-- 是否使用本地cache,true使用，false 不使用 -->
+	<local_cache value="true"/>
+	
+	<app_id value="11"/>
+	<app_key value="yDfqg6XVtAnK"/>
+	
+	<upload_filepath value="${upload_filepath}" />
+	<upload_filedeploy value="10" />
+	<target_filepath   value="${target_filepath}" />
+	<target_filedeploy value="20" />
+	<shell_filepath   value="${shell_filepath}" />
+	
+	<excel_max_recode value="200"/>
+	
+	<!-- 发布指令服务器 -->
+	<cmd_server_count value="2"/>
+	<cmd_server_base  value="cmd_server_"/>
+	
+	<cmd_server_1 value="101.226.185.57"/>
+	<cmd_server_2 value="121.14.37.77"/>
+	
+	<cmd_server_info value="101.226.185.57:3fada96f-2791-44b2-8a1d-c7b9f9763823,121.14.37.77:9b5c7dbd-a057-41e9-99ec-884b56338e63"/>
+	
+	<!-- 下发命令接口-->
+	<cmd_url value="http://%s:10025/commandSend" />
+	
+	<!-- 查询接日志接口 -->
+	<cmd_query_url value="http://%s:10025/query" />	
+</config>

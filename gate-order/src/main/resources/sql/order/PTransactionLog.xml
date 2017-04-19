@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.order.mapper.PTransactionLogMapper">
+	
+	<!-- "id" must be as same as method name of the interface -->
+	<insert id="insert" parameterType="pTransactionLogPO">
+		<![CDATA[
+			insert into p_transaction_log set
+							order_id=#{orderId},
+									order_type=#{orderType},
+									amount=#{amount},
+									log_time=#{logTime},
+									remarks=#{remarks},
+									operate_type=#{operateType},
+									partner_id=#{partnerId},
+									partner_trade_no=#{partnerTradeNo},
+									pay_channel=#{payChannel},
+									channel_trade_no=#{channelTradeNo},
+									subject=#{subject},
+									sub_subject=#{subSubject},
+									fee=#{fee},
+									usable_balance=#{usableBalance},
+									user_id=#{userId},
+									target_user_id=#{targetUserId}
+					]]>
+	</insert>
+	
+	<delete id="deleteByOrderId" parameterType="int">
+		<![CDATA[
+			DELETE FROM p_transaction_log WHERE order_id = #{orderId}
+		]]>
+	</delete>
+	
+	<select id="list" resultType="pTransactionLogVO" parameterType="pTransactionLogSearchVO">
+		<![CDATA[        
+			select t.*, b1.remark as userName, b2.remark as targetUserName from p_transaction_log t left join p_balance b1 on t.user_id = b1.user_id left join p_balance b2 on t.target_user_id = b2.user_id
+			]]>
+		<where>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ AND t.log_time >= #{startDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''" >
+				<![CDATA[ AND t.log_time <= #{endDate} ]]>
+			</if>
+			<if test="orderType != null" >
+				<![CDATA[ AND t.order_type = #{orderType.type} ]]>
+			</if>
+			<if test="channel != null and channel != '' " >
+				<![CDATA[ AND t.pay_channel = #{channel} ]]>
+			</if>
+			<if test="userId > 0" >
+				<![CDATA[ AND t.user_id = #{userId} ]]>
+			</if>
+			<if test="targetUserId > 0" >
+				<![CDATA[ AND t.target_user_id = #{targetUserId} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND t.partner_trade_no = #{partnerOrderId} ]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND t.order_id = #{orderId} ]]>
+			</if>
+			
+		</where>
+		<![CDATA[ order by log_time desc LIMIT #{start} , #{size}  ]]>
+	</select>
+	<select id="count" resultType="int" parameterType="pTransactionLogSearchVO">
+		<![CDATA[
+			select count(*) from p_transaction_log t left join p_balance b on t.user_id = b.user_id
+			]]>
+		<where>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ AND t.log_time >= #{startDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''" >
+				<![CDATA[ AND t.log_time <= #{endDate} ]]>
+			</if>
+			<if test="orderType != null" >
+				<![CDATA[ AND t.order_type = #{orderType.type} ]]>
+			</if>
+			<if test="channel != null and channel != '' " >
+				<![CDATA[ AND t.pay_channel = #{channel} ]]>
+			</if>
+			<if test="userId > 0" >
+				<![CDATA[ AND t.user_id = #{userId} ]]>
+			</if>
+			<if test="targetUserId > 0" >
+				<![CDATA[ AND t.target_user_id = #{targetUserId} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND t.partner_trade_no = #{partnerOrderId} ]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND t.order_id = #{orderId} ]]>
+			</if>
+			
+		</where>
+	</select>
+	
+	<select id="getTotal" resultType="totalAssetInfo" parameterType="pTransactionLogSearchVO">
+		<![CDATA[        
+			select
+				IFNULL(SUM(IF(subject=1001 and sub_subject = 1002, amount, 0)), 0) AS  totalWithdraw,
+				IFNULL(SUM(IF(subject=1000 and sub_subject = 1001, amount, 0)), 0) AS  totalCharge
+			from 
+			p_transaction_log t
+			]]>
+		<where>
+			t.user_id != 100
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ AND t.log_time >= #{startDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''" >
+				<![CDATA[ AND t.log_time <= #{endDate} ]]>
+			</if>
+			<if test="orderType != null" >
+				<![CDATA[ AND t.order_type = #{orderType.type} ]]>
+			</if>
+			<if test="channel != null and channel != '' " >
+				<![CDATA[ AND t.pay_channel = #{channel} ]]>
+			</if>
+			<if test="userId > 0" >
+				<![CDATA[ AND t.user_id = #{userId} ]]>
+			</if>
+			<if test="targetUserId > 0" >
+				<![CDATA[ AND t.target_user_id = #{targetUserId} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND t.partner_trade_no = #{partnerOrderId} ]]>
+			</if>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ AND t.order_id = #{orderId} ]]>
+			</if>
+		</where>
+	</select>
+	
+</mapper>

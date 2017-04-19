@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.notify.mapper.NWithdrawQueueMapper">
+	<!-- "id" must be as same as method name of the interface -->
+	
+	<insert id="insert" parameterType="NWithdrawQueuePO">
+		<![CDATA[
+			insert into n_withdraw_queue set
+							order_id=#{orderId},
+							execute_time=#{executeTime},
+							create_time=#{createTime},
+							last_modify=#{lastModify},
+							params=#{params},
+							channel=#{channel},
+							partner_id=#{partnerId},
+							partner_order_id=#{partnerOrderId}
+					]]>
+	</insert>
+	
+	<select id="list" resultType="NWithdrawQueuePO">
+		<![CDATA[ 
+			select * from n_withdraw_queue 
+				where execute_time<= #{now} and execute_time > date_sub(#{now}, interval 1 day) order by id asc limit 0,#{limit} 
+			]]>
+	</select>
+	
+	<delete id="delete">
+		<![CDATA[
+			DELETE FROM n_withdraw_queue WHERE id = #{id}
+		]]>
+	</delete>
+	
+	<select id="getByPertnerId" resultType="NWithdrawQueuePO">
+		<![CDATA[ 
+			select * from n_withdraw_queue 
+				where partner_id = #{partnerId} and partner_order_id = #{partnerOrderId} limit 1
+			]]>
+	</select>
+</mapper>

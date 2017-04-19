@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+	<!-- url要保证唯一，可作为菜单关系和更新的依据 -->
+	<menuItem name="银行配置管理" url="/bank" hide="0">
+		<menuItem name="渠道银行支付配置" url="/bank/payLimitList.jspx" hide="0">
+			<resource url="/bank/payLimitList.jspx"></resource>
+			<resource url="/bank/payLimitList.do"></resource>
+			<resource url="/bank/payLimitAdd.do"></resource>
+		</menuItem>
+	</menuItem>
+	
+</menu>

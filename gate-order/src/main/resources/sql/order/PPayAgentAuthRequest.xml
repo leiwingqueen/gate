@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- "namespace" must be the path of interface, or show error “is not known to the MapperRegistry” when launch -->
+<mapper namespace="com.elend.gate.order.mapper.PPayAgentAuthRequestMapper">
+	
+	<!-- "id" must be as same as method name of the interface -->
+	<select id="list" resultType="pPayAgentAuthRequestPO" parameterType="pPayAgentAuthRequestSearchVO">
+		<![CDATA[select * from p_pay_agent_auth_request ]]>
+		<where>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ order_id = #{orderId}]]>
+			</if>
+			<if test="partnerId != null and partnerId != ''" >
+				<![CDATA[ AND partner_id = #{partnerId} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND partner_order_id = #{partnerOrderId} ]]>
+			</if>
+			<if test="applyOrderId != null and applyOrderId != ''" >
+				<![CDATA[ AND apply_order_id = #{applyOrderId} ]]>
+			</if>
+			<if test="channel != null and channel != ''" >
+				<![CDATA[ AND channel = #{channel} ]]>
+			</if>
+			<if test="status != null and status != ''" >
+				<![CDATA[ AND status = #{status} ]]>
+			</if>
+			<if test="createTime != null and createTime != ''" >
+				<![CDATA[ AND create_time = #{createTime} ]]>
+			</if>
+			<if test="nextQueryTime != null and nextQueryTime != ''" >
+				<![CDATA[ AND next_query_time <= #{nextQueryTime} ]]>
+			</if>
+			<if test="startTime != null and startTime != ''" >
+				<![CDATA[ AND create_time >= #{startTime} ]]>
+			</if>
+			<if test="endTime != null and endTime != ''" >
+				<![CDATA[ AND create_time <= #{endTime} ]]>
+			</if>
+		</where>
+		ORDER BY id DESC 
+		<![CDATA[ LIMIT #{start} , #{size}  ]]>
+	</select>
+	
+	<select id="count" resultType="int" parameterType="pPayAgentAuthRequestSearchVO">
+		<![CDATA[select count(*) as num from p_pay_agent_auth_request ]]>
+		<where>
+			<if test="orderId != null and orderId != ''" >
+				<![CDATA[ order_id = #{orderId}  ]]>
+			</if>
+			<if test="partnerId != null and partnerId != ''" >
+				<![CDATA[ AND partner_id = #{partnerId} ]]>
+			</if>
+			<if test="partnerOrderId != null and partnerOrderId != ''" >
+				<![CDATA[ AND partner_order_id = #{partnerOrderId} ]]>
+			</if>
+			<if test="applyOrderId != null and applyOrderId != ''" >
+				<![CDATA[ AND apply_order_id = #{applyOrderId} ]]>
+			</if>
+			<if test="channel != null and channel != ''" >
+				<![CDATA[ AND channel = #{channel} ]]>
+			</if>
+			<if test="status != null and status != ''" >
+				<![CDATA[ AND status = #{status} ]]>
+			</if>
+			<if test="createTime != null and createTime != ''" >
+				<![CDATA[ AND create_time = #{createTime} ]]>
+			</if>
+			<if test="nextQueryTime != null and nextQueryTime != ''" >
+				<![CDATA[ AND next_query_time <= #{nextQueryTime} ]]>
+			</if>
+			<if test="startTime != null and startTime != ''" >
+				<![CDATA[ AND create_time >= #{startTime} ]]>
+			</if>
+			<if test="endTime != null and endTime != ''" >
+				<![CDATA[ AND create_time <= #{endTime} ]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="get" resultType="pPayAgentAuthRequestPO" parameterType="int">
+		<![CDATA[
+			select * from p_pay_agent_auth_request where id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="pPayAgentAuthRequestPO">
+		<![CDATA[
+			insert into p_pay_agent_auth_request set
+							order_id=#{orderId},
+									partner_id=#{partnerId},
+									partner_order_id=#{partnerOrderId},
+									amount=#{amount},
+									apply_order_id=#{applyOrderId},
+									channel=#{channel},
+									request_url=#{requestUrl},
+									param=#{param},
+									result=#{result},
+									callback_time=#{callbackTime},
+									callback_result=#{callbackResult},
+									ip=#{ip},
+									status=#{status},
+									notify_url=#{notifyUrl},
+									create_time=#{createTime},
+									update_time=#{updateTime},
+									next_query_time=#{nextQueryTime},
+									query_num=#{queryNum}
+					]]>
+	</insert>
+    
+	<update id="update" parameterType="pPayAgentAuthRequestPO">
+		<![CDATA[
+			update p_pay_agent_auth_request set
+							order_id=#{orderId},
+									partner_id=#{partnerId},
+									partner_order_id=#{partnerOrderId},
+									amount=#{amount},
+									apply_order_id=#{applyOrderId},
+									channel=#{channel},
+									request_url=#{requestUrl},
+									param=#{param},
+									result=#{result},
+									callback_time=#{callbackTime},
+									callback_result=#{callbackResult},
+									ip=#{ip},
+									status=#{status},
+									notify_url=#{notifyUrl},
+									create_time=#{createTime},
+									update_time=#{updateTime},
+									next_query_time=#{nextQueryTime},
+									query_num=#{queryNum}
+				where id = #{id}
+		]]>
+	</update>
+    
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			DELETE FROM p_pay_agent_auth_request WHERE id = #{id}
+		]]>
+	</delete>
+	
+	<select id="getByPartnerOrderId" resultType="pPayAgentAuthRequestPO">
+		<![CDATA[
+			select * from p_pay_agent_auth_request where partner_order_id = #{partnerOrderId} and partner_id = #{partnerId}
+		]]>
+	</select>
+	
+	<select id="getByOrderId" resultType="pPayAgentAuthRequestPO">
+		<![CDATA[
+			select * from p_pay_agent_auth_request where order_id = #{orderId}
+		]]>
+	</select>
+	
+	
+	<update id="updateCheckCodeCallback" >
+		<![CDATA[ update p_pay_agent_auth_request  ]]>
+		<set>
+			<if test="newStatus > 0 ">
+				<![CDATA[ status = #{newStatus},  ]]>
+			</if>
+			<if test="requestUrl != null and requestUrl != ''">
+				<![CDATA[ request_url = #{requestUrl},  ]]>
+			</if>
+			<if test="result != null and result != ''">
+				<![CDATA[ result = #{result},  ]]>
+			</if>
+			<if test="callbackResult != null and callbackResult != ''">
+				<![CDATA[ callback_result = #{callbackResult},  ]]>
+			</if>
+			<if test="callbackTime != null and callbackTime != ''">
+				<![CDATA[ callback_time = #{callbackTime},  ]]>
+			</if>
+			<if test="updteTime != null and updteTime != ''">
+				<![CDATA[ update_time = #{updteTime},  ]]>
+			</if>
+		</set>
+		where 
+			order_id = #{orderId} and status = #{oldStatus}
+	</update>
+	
+	<update id="updateNextQueryTime">
+		<![CDATA[
+			update p_pay_agent_auth_request set
+							query_num = query_num + 1,
+							next_query_time = #{nextQueryTime}
+				where 
+					order_id = #{orderId}
+		]]>
+	</update>
+	
+</mapper>
